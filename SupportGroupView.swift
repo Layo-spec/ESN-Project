@@ -1,6 +1,6 @@
 import SwiftUI
 
-// Define a support group model
+
 struct SupportGroup: Identifiable {
     let id = UUID()
     let title: String
@@ -26,21 +26,21 @@ struct SupportGroupView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                // Title and Search Bar
+                
                 Text("Peer Support Groups")
                     .font(.largeTitle)
                     .bold()
                     .padding(.top, 20)
                     .foregroundColor(.white)
                 
-                // Search Bar
+                
                 TextField("Search", text: $searchText)
                     .padding(10)
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                     .padding(.horizontal)
                 
-                // Grid of Support Groups with dynamic search results
+                
                 ScrollView {
                     if filteredGroups.isEmpty {
                         Text("No support groups found")
@@ -145,7 +145,7 @@ struct GroupNavigationLink: View {
 }
 
 
-// Detail view for individual support groups
+// view for individual support groups
 struct GroupDetailView: View {
     let group: SupportGroup
     @State private var showTermsAndConditions = false // State to show terms and conditions
@@ -190,12 +190,12 @@ struct GroupDetailView: View {
 
     // Function to check if the user has accepted the terms for the group
     private func hasAcceptedTerms(for groupTitle: String) -> Bool {
-        // Check UserDefaults to see if the user has accepted the terms for this group
+        // Check to see if the user has accepted the terms for this group
         return UserDefaults.standard.bool(forKey: "\(groupTitle)_termsAccepted")
     }
 }
 
-// Reusable Tab Bar Item
+// Tab Bar Items
 struct TabBarItem: View {
     let icon: String
     let label: String
