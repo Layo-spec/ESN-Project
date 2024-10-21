@@ -197,7 +197,7 @@ struct UserAuthView: View {
             if let error = error {
                 errorMessage = "Error: \(error.localizedDescription)"
             } else {
-                showPasswordResetAlert = true // Show success alert
+                showPasswordResetAlert = true 
             }
         }
     }
