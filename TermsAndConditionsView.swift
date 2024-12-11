@@ -2,6 +2,8 @@ import SwiftUI
 
 struct TermsAndConditionsView: View {
     let groupTitle: String // Group title passed in to track acceptance
+    let groupID: String // Add groupID
+    let userID: String
     @State private var navigateToOptions = false // State to trigger navigation to the options view
 
     var body: some View {
@@ -33,7 +35,7 @@ struct TermsAndConditionsView: View {
             }
             .padding()
             .navigationDestination(isPresented: $navigateToOptions) {
-                GroupOptionsView() // Navigate to options after accepting terms
+                GroupOptionsView(groupID: groupID, userID: userID) // Navigate to options after accepting terms
             }
         }
         .padding()
@@ -44,5 +46,3 @@ struct TermsAndConditionsView: View {
         UserDefaults.standard.set(true, forKey: "\(groupTitle)_termsAccepted")
     }
 }
-
-
