@@ -173,7 +173,7 @@ struct RegistrationView: View {
             } else {
                 print("User data saved successfully.")
                 onComplete(self.firstName, self.lastName, self.studentId, userId, self.avatar)
-                self.presentationMode.wrappedValue.dismiss() 
+                self.presentationMode.wrappedValue.dismiss()
             }
         }
     }
