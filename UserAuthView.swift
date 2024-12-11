@@ -11,13 +11,12 @@ enum AuthNavigation: Hashable {
 
 struct UserAuthView: View {
     @State private var email: String = ""
-    @State private var password: String = "" // State for password
+    @State private var password: String = ""
     @State private var errorMessage: String = ""
-    @State private var keepLoggedIn = false // State for 'Keep me logged in'
+    @State private var keepLoggedIn = false
     @State private var showPasswordResetAlert = false // To control alert for password reset
-    @State private var navigationPath: [AuthNavigation] = [] // Stack for navigation
+    @State private var navigationPath: [AuthNavigation] = []
     
-    @State private var registeredEmails: Set<String> = [] // Set for storing registered emails
     @State private var userInfo: [String: (userId: String, avatar: UIImage?)] = [:] // Store user info
 
     @Environment(\.scenePhase) var scenePhase // Detect app activity
@@ -31,6 +30,7 @@ struct UserAuthView: View {
                     .fontWeight(.bold)
                     .padding(.top, 40)
                     .padding(.bottom, 20)
+                    .foregroundColor(.white)
                 
                 TextField("Email", text: $email)
                     .padding()
@@ -39,7 +39,7 @@ struct UserAuthView: View {
                     .autocapitalization(.none)
                     .keyboardType(.emailAddress)
                 
-                SecureField("Password", text: $password) // Password field
+                SecureField("Password", text: $password)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(5)
@@ -48,7 +48,7 @@ struct UserAuthView: View {
                     .padding()
 
                 Button(action: {
-                    handleLogin() // Use the updated login handler
+                    handleLogin()
                 }) {
                     Text("Login")
                         .padding()
@@ -68,7 +68,7 @@ struct UserAuthView: View {
                 Text(errorMessage).foregroundColor(.red).padding()
                 
                 NavigationLink(value: AuthNavigation.registration(email: email)) {
-                    EmptyView() // Trigger navigation here if needed
+                    EmptyView()
                 }
             }
             .padding()
@@ -76,12 +76,11 @@ struct UserAuthView: View {
                 switch destination {
                 case .registration(let email):
                     RegistrationView(email: email, onComplete: { firstName, lastName, studentId, userId, avatar in
-                        registeredEmails.insert(email)
                         userInfo[email] = (userId: userId, avatar: avatar)
                         navigationPath.append(.supportGroups) // Navigate to support groups
                     })
                 case .supportGroups:
-                    SupportGroupView()
+                    SupportGroupView(userId: "g3nJHLOCyTVsFHnHC4bmmJFfl8W2")
                 }
             }
             .onChange(of: scenePhase) { oldPase, newPhase in
@@ -92,12 +91,18 @@ struct UserAuthView: View {
             .alert(isPresented: $showPasswordResetAlert) {
                 Alert(title: Text("Password Reset"), message: Text("A password reset link has been sent to \(email). Please check your inbox."), dismissButton: .default(Text("OK")))
             }
+            .background(
+                Image("backgroundImage")
+                    .resizable()
+                    .scaledToFill()
+                    .edgesIgnoringSafeArea(.all)
+            )
         }
     }
     
     // Function to Handle login
     private func handleLogin() {
-        // Check if email contains the correct domain
+        // Check if email contains "@my.fisk.edu"
         guard email.contains("@my.fisk.edu") else {
             errorMessage = "Email must contain '@my.fisk.edu'"
             return
@@ -140,10 +145,10 @@ struct UserAuthView: View {
             }
             
             if keepLoggedIn {
-                // Do nothing, Firebase automatically persists user sessions
+                // Firebase automatically persists user sessions
                 print("User will remain logged in across sessions.")
             } else {
-                // Set a timer to log out after 10 minutes of inactivity
+                // timer to log out after 10 minutes of inactivity
                 scheduleAutoLogout()
             }
 
@@ -197,7 +202,7 @@ struct UserAuthView: View {
             if let error = error {
                 errorMessage = "Error: \(error.localizedDescription)"
             } else {
-                showPasswordResetAlert = true 
+                showPasswordResetAlert = true // Show success alert
             }
         }
     }
